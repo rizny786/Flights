@@ -9,7 +9,7 @@ st.set_page_config(page_title="Business Intelligence", page_icon=":airplane:", l
 with st.spinner("Loading"):
     @st.cache_resource
     def load_data():
-        return pd.read_csv("data/1991.csv.gz",encoding='ANSI', compression="gzip").dropna(axis=1, how='all').reset_index(drop=True), pd.read_csv("data/2001.csv.gz",encoding='ANSI', compression="gzip").dropna(axis=1, how='all').reset_index(drop=True)
+        return pd.read_csv("Data/1991.csv.gz",encoding='ANSI', compression="gzip").dropna(axis=1, how='all').reset_index(drop=True), pd.read_csv("Data/2001.csv.gz",encoding='ANSI', compression="gzip").dropna(axis=1, how='all').reset_index(drop=True)
 
 df_91, df_01 = load_data()
 
