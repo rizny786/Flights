@@ -7,14 +7,14 @@ import functions
 
 st.set_page_config(page_title="Business Intelligence", page_icon=":airplane:", layout="wide", initial_sidebar_state="auto", menu_items=None)
 with st.spinner("Loading"):
-    # @st.cache_data
+    @st.cache_data
     def load_data():
         return pd.read_csv("Data/1991.csv.gz", encoding='cp1252',compression="gzip").dropna(axis=1, how='all').reset_index(drop=True).head(10000), pd.read_csv("Data/2001.csv.gz", encoding='cp1252',compression="gzip").dropna(axis=1, how='all').reset_index(drop=True).head(10000)
 
 df_91, df_01 = load_data()
 
 filter_1, filter_2, filter_3,filter_4, filter_5 = st.columns([1,1,1,1,1], gap="medium")
-# @st.cache_data
+@st.cache_data
 def getFilters():
     return np.union1d(df_91['Origin'].unique(), df_01['Origin'].unique()), np.union1d(df_91['Dest'].unique(),df_01['Dest'].unique()),np.union1d(df_91['UniqueCarrier'].unique(), df_01['UniqueCarrier'].unique()),df_91['Month'].unique(), df_01['DayofMonth']
                     
