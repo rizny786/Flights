@@ -4,8 +4,10 @@ from pyspark.sql.functions import when
 from pyspark.ml import Pipeline
 from pyspark.ml.feature import StringIndexer, OneHotEncoder, MinMaxScaler, VectorAssembler
 from pyspark.sql.functions import col
-
-
+from pyspark.ml.classification import RandomForestClassifier, GBTClassifier
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+import pandas as pd
+import plotly.express as px
 
 schema_91 = StructType([
     StructField("Year", IntegerType(), True),
@@ -105,7 +107,7 @@ def preprocess_data(df, categorical_cols, numerical_cols):
 
     # Assemble all encoded categorical columns and numerical columns into a single feature vector
     assembler = VectorAssembler(
-        inputCols=[col_name + "_encoded" for col_name in categorical_cols] + [num_cols for num_cols in numerical_cols],
+        inputCols=[col_name + "_encoded" for col_name in categorical_cols] + numerical_cols,
         outputCol="features"
     )
 
@@ -131,3 +133,75 @@ def preprocess_data(df, categorical_cols, numerical_cols):
     return transformed_df.select(select_expr)
 
 
+def train_and_evaluate(train_data, test_data):
+    # Define models
+    rf = RandomForestClassifier(labelCol="target", featuresCol="features", numTrees=100)
+    # xgb = GBTClassifier(labelCol="target", featuresCol="features", maxIter=10)
+
+    # Create pipelines for models
+    rf_pipeline = Pipeline(stages=[rf])
+    # xgb_pipeline = Pipeline(stages=[xgb])
+
+    # Train models
+    rf_model = rf_pipeline.fit(train_data)
+    # xgb_model = xgb_pipeline.fit(train_data)
+
+    # Evaluate models on test data
+    evaluator = MulticlassClassificationEvaluator(labelCol="target", predictionCol="prediction", metricName="accuracy")
+
+    rf_predictions = rf_model.transform(test_data)
+    rf_accuracy = evaluator.evaluate(rf_predictions)
+
+    # xgb_predictions = xgb_model.transform(test_data)
+    # xgb_accuracy = evaluator.evaluate(xgb_predictions)
+
+    # # Get feature importances for RandomForest
+    # rf_feature_importance = rf_model.stages[-1].featureImportances
+    # rf_feature_importance = [(train_data.columns[i], round(score * 100, 2)) for i, score in enumerate(rf_feature_importance)]
+
+    # # Get feature importances for XGBoost
+    # xgb_feature_importance = xgb_model.stages[-1].featureImportances
+    # xgb_feature_importance = [(train_data.columns[i], round(score * 100, 2)) for i, score in enumerate(xgb_feature_importance)]
+
+    # Create dictionaries for each model containing model name, model object, accuracy, and feature importance
+    rf_dict = {
+        'model_name': 'Random Forest',
+        'model': rf_model,
+        'accuracy': rf_accuracy
+    }
+
+    # xgb_dict = {
+    #     'model_name': 'XGBoost',
+    #     'model': xgb_model,
+    #     'accuracy': xgb_accuracy
+    # }
+
+    return rf_dict #, xgb_dict
+
+def plot_accuracy_bar_chart(rf_accuracy, xgb_accuracy):
+    # Create a DataFrame for accuracy scores
+    data = {
+        'Model': ['Random Forest', 'XGBoost'],
+        'Accuracy': [rf_accuracy, xgb_accuracy]
+    }
+    df = pd.DataFrame(data)
+
+    # Plotting the accuracy bar chart
+    fig = px.bar(df, x='Model', y='Accuracy', text='Accuracy', title='Model Accuracy Comparison')
+    fig.update_traces(texttemplate='%{text:.2%}', textposition='outside')  # Display accuracy as percentage
+    fig.update_layout(yaxis=dict(title='Accuracy'))
+    return fig
+
+def plot_feature_importance(feature_importance):
+    # Convert feature importance to a DataFrame
+    df = pd.DataFrame(feature_importance, columns=['Feature', 'Importance'])
+
+    # Sort by importance score
+    df = df.sort_values(by='Importance', ascending=False)
+
+    # Plotting the feature importance bar chart
+    fig = px.bar(df, x='Feature', y='Importance', text='Importance',
+                 title='Feature Importance', labels={'Importance': 'Importance (%)'})
+    fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')  # Display importance as percentage
+    fig.update_layout(xaxis=dict(title='Feature'), yaxis=dict(title='Importance'))
+    return fig
