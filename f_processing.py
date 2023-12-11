@@ -90,9 +90,7 @@ def preprocessing(df91, df01):
 
 def preprocess_data(df, categorical_cols, numerical_cols):
     # Remove null values
-    all_columns = list()
     for col_name in df.columns:
-        all_columns.append(col_name)
         df = df.filter(col(col_name).isNotNull())
 
     # Indexing and One-Hot Encoding for categorical columns
@@ -135,7 +133,7 @@ def preprocess_data(df, categorical_cols, numerical_cols):
 
 def train_and_evaluate(train_data, test_data):
     # Define models
-    rf = RandomForestClassifier(labelCol="target", featuresCol="features", numTrees=100)
+    rf = RandomForestClassifier(labelCol="target", featuresCol="features")
     # xgb = GBTClassifier(labelCol="target", featuresCol="features", maxIter=10)
 
     # Create pipelines for models
