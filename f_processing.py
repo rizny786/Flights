@@ -93,26 +93,21 @@ def preprocess_data(df, categorical_cols, numerical_cols):
     for col_name in df.columns:
         df = df.filter(col(col_name).isNotNull())
 
-    # Indexing and One-Hot Encoding for categorical columns
+     # Indexing for categorical columns using StringIndexer (Label Encoding)
     indexers = [
         StringIndexer(inputCol=col_name, outputCol=col_name + "_index", handleInvalid="keep")
         for col_name in categorical_cols
     ]
-    encoders = [
-        OneHotEncoder(inputCol=col_name + "_index", outputCol=col_name + "_encoded")
-        for col_name in categorical_cols
-    ]
 
-    # Assemble all encoded categorical columns and numerical columns into a single feature vector
+    # Assemble all indexed categorical columns and numerical columns into a single feature vector
     assembler = VectorAssembler(
-        inputCols=[col_name + "_encoded" for col_name in categorical_cols] + numerical_cols,
+        inputCols=[col_name + "_index" for col_name in categorical_cols] + numerical_cols,
         outputCol="features"
     )
 
     # Assemble all stages into a pipeline
-    stages = indexers + encoders + [assembler]
+    stages = indexers + [assembler]
     pipeline = Pipeline(stages=stages)
-
     # Fit the pipeline to the DataFrame
     pipeline_model = pipeline.fit(df)
 
