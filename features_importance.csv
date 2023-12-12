@@ -1,0 +1,40 @@
+,Feature,Importance,Model
+0,DepDelay,5.777508923877508,Logistic Regression
+1,ActualElapsedTime,3.2454031073498024,Logistic Regression
+2,Distance,3.2111559931977895,Logistic Regression
+3,DepTime,0.11894332279885808,Logistic Regression
+4,DayOfWeek,0.04932511980857472,Logistic Regression
+5,UniqueCarrier,0.041940394066479786,Logistic Regression
+6,FlightNum,0.03489050517306262,Logistic Regression
+7,Month,0.02872455458061244,Logistic Regression
+8,Dest,0.002537826437393316,Logistic Regression
+9,DayofMonth,0.0023166207686175617,Logistic Regression
+10,Origin,0.0002897061809618193,Logistic Regression
+11,Cancelled,0.0,Logistic Regression
+12,Diverted,0.0,Logistic Regression
+13,DepDelay,0.24026577943747623,Decision Tree
+14,Distance,0.1635562494977636,Decision Tree
+15,ActualElapsedTime,0.16308568430733666,Decision Tree
+16,DepTime,0.08701700779607648,Decision Tree
+17,Origin,0.06949418655377079,Decision Tree
+18,Dest,0.06470942120561564,Decision Tree
+19,FlightNum,0.06444283044171369,Decision Tree
+20,Month,0.058702826910688455,Decision Tree
+21,UniqueCarrier,0.04399971305442259,Decision Tree
+22,DayofMonth,0.02844746798916036,Decision Tree
+23,DayOfWeek,0.01627883280597557,Decision Tree
+24,Cancelled,0.0,Decision Tree
+25,Diverted,0.0,Decision Tree
+26,DepDelay,0.5778450965881348,XGBoost
+27,Distance,0.11271144449710846,XGBoost
+28,ActualElapsedTime,0.09516458213329315,XGBoost
+29,Origin,0.04772180691361427,XGBoost
+30,UniqueCarrier,0.039375025779008865,XGBoost
+31,Dest,0.033894430845975876,XGBoost
+32,DayOfWeek,0.03282761946320534,XGBoost
+33,Month,0.02172204479575157,XGBoost
+34,DepTime,0.0169100072234869,XGBoost
+35,FlightNum,0.014469086192548275,XGBoost
+36,DayofMonth,0.007358867675065994,XGBoost
+37,Cancelled,0.0,XGBoost
+38,Diverted,0.0,XGBoost
