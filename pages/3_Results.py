@@ -1,12 +1,13 @@
 import streamlit as st
 import visualizations as v
 import pandas as pd
+import xgboost as xgb
+import joblib
 
 st.set_page_config(page_title="Results", page_icon="💡", layout="wide", initial_sidebar_state="auto", menu_items=None)
 st.title("Results💡")
 
 accuracies = pd.read_csv('Data/accuracies.csv')
-accuracies =  accuracies.drop(accuracies.columns[0], axis=1)
 
 
 col_l, col_r = st.columns([1, 1], gap="medium")
@@ -20,7 +21,6 @@ with col_l:
    
     fig = v.plot_feature_importance(pd.read_csv('Data/features_importance_01.csv'))
     st.plotly_chart(fig, use_container_width= True) 
-
     
     
 
@@ -33,8 +33,6 @@ with col_r:
 
     fig = v.plot_feature_importance(pd.read_csv('Data/features_importance_01.csv'))
     st.plotly_chart(fig, use_container_width= True)
-
-    
 
     
 

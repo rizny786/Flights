@@ -1,4 +1,6 @@
 import plotly.graph_objs as go
+import xgboost as xgb
+from sklearn.tree import plot_tree
 import pandas as pd
 
 def by_airline(df):
@@ -161,11 +163,11 @@ def by_dest(df):
 
     return fig
 
-def flight_trend_by_airline(dataframe):
-    # Group data by 'UniqueCarrier' and 'Month' and count the number of flights
-    flight_counts = dataframe.groupby(['UniqueCarrier', 'Month']).size().reset_index(name='FlightCount')
+def flight_trend_ontime_arrival(dataframe):
+    ontime_flights = dataframe[dataframe['ArrDelay'] > 0]
 
-    # Create traces for all airlines
+    flight_counts = ontime_flights.groupby(['UniqueCarrier', 'Month']).size().reset_index(name='FlightCount')
+
     traces = []
     airlines = flight_counts['UniqueCarrier'].unique()
     for airline in airlines:
@@ -174,22 +176,50 @@ def flight_trend_by_airline(dataframe):
             x=airline_data['Month'],
             y=airline_data['FlightCount'],
             mode='lines+markers',
-            name=f'Flight Trend for {airline}',
+            name=f'{airline}',
             marker=dict()
         )
         traces.append(trace)
 
-    # Create layout for the chart
     layout = go.Layout(
-        title='Flight Trend by Airline',
+        title='Flight Trend for On-Time Arrival by Airline',
         xaxis=dict(title='Month'),
         yaxis=dict(title='Number of Flights')
     )
 
-    # Create figure with data and layout
     fig = go.Figure(data=traces, layout=layout)
 
     return fig
+
+
+def flight_trend_delayed_arrival(dataframe):
+    delayed_flights = dataframe[dataframe['ArrDelay'] <= 0]
+
+    flight_counts = delayed_flights.groupby(['UniqueCarrier', 'Month']).size().reset_index(name='FlightCount')
+
+    traces = []
+    airlines = flight_counts['UniqueCarrier'].unique()
+    for airline in airlines:
+        airline_data = flight_counts[flight_counts['UniqueCarrier'] == airline]
+        trace = go.Scatter(
+            x=airline_data['Month'],
+            y=airline_data['FlightCount'],
+            mode='lines+markers',
+            name=f'{airline}',
+            marker=dict()
+        )
+        traces.append(trace)
+
+    layout = go.Layout(
+        title='Flight Trend for Delayed Arrival by Airline',
+        xaxis=dict(title='Month'),
+        yaxis=dict(title='Number of Flights')
+    )
+
+    fig = go.Figure(data=traces, layout=layout)
+
+    return fig
+
 
 
 def plot_feature_importance(combined_feature_importance):

@@ -120,11 +120,10 @@ with st.spinner("Loading"):
                 df_q_91), use_container_width=True)
 
         with r3_c1:
-            st.plotly_chart(dv.by_origin(
-                df_q_91), use_container_width=True)
+            st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_01), use_container_width=True)
         with r3_c2:
-            st.plotly_chart(dv.by_dest(
-                df_q_91), use_container_width=True)
+            st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_01), use_container_width=True)
+        
 
 
     with r_c2:
@@ -167,9 +166,7 @@ with st.spinner("Loading"):
             st.plotly_chart(dv.by_airline(
                 df_q_01), use_container_width=True)
         with r3_c1:
-            st.plotly_chart(dv.by_origin(
-                df_q_01), use_container_width=True)
+            st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_01), use_container_width=True)
         with r3_c2:
-            st.plotly_chart(dv.flight_trend_by_airline(df_q_01), use_container_width=True)
-            # st.plotly_chart(dv.by_dest(
-            #     df_q_01), use_container_width=True)
+            st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_01), use_container_width=True)
+            
