@@ -120,9 +120,9 @@ with st.spinner("Loading"):
                 df_q_91), use_container_width=True)
 
         with r3_c1:
-            st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_01), use_container_width=True)
+            st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_91), use_container_width=True)
         with r3_c2:
-            st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_01), use_container_width=True)
+            st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_91), use_container_width=True)
         
 
 
