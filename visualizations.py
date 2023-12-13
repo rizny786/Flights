@@ -226,9 +226,19 @@ def plot_feature_importance(combined_feature_importance):
     data = []
     models = combined_feature_importance['Model'].unique()
 
-    for model in models:
+    # Define a color palette for each model
+    color_palette = ['gold', 'silver']  # Add more colors if needed
+
+    for i, model in enumerate(models):
         model_data = combined_feature_importance[combined_feature_importance['Model'] == model]
-        data.append(go.Bar(x=model_data['Feature'], y=model_data['Importance'], name=model))
+        data.append(
+            go.Bar(
+                x=model_data['Feature'],
+                y=model_data['Importance'],
+                name=model,
+                marker=dict(color=color_palette[i])  # Assign a color from the palette to each model
+            )
+        )
 
     layout = go.Layout(
         title='Feature Importance Comparison',

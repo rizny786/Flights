@@ -123,7 +123,15 @@ with st.spinner("Loading"):
             st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_91), use_container_width=True)
         with r3_c2:
             st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_91), use_container_width=True)
-        
+       
+    with r_m:
+        st.markdown(f'''
+                    <html>
+                    <body style="background-image: url('images/bg.jpg'); background-repeat: repeat;">
+                    <!-- You can add content here if needed -->
+                    </body>
+                    </html>
+                    ''', unsafe_allow_html= True)
 
 
     with r_c2:

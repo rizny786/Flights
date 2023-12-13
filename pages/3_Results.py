@@ -19,7 +19,7 @@ with col_l:
     fig = v.plot_model_accuracy(accuracies['Year 91'].to_list())
     st.plotly_chart(fig, use_container_width= True)
    
-    fig = v.plot_feature_importance(pd.read_csv('Data/features_importance_01.csv'))
+    fig = v.plot_feature_importance(pd.read_csv('Data/features_importance_91.csv'))
     st.plotly_chart(fig, use_container_width= True) 
     
     
