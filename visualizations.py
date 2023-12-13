@@ -1,5 +1,4 @@
 import plotly.graph_objs as go
-import streamlit as st
 import pandas as pd
 
 def by_airline(df):
@@ -193,3 +192,37 @@ def flight_trend_by_airline(dataframe):
     return fig
 
 
+def plot_feature_importance(combined_feature_importance):
+    data = []
+    models = combined_feature_importance['Model'].unique()
+
+    for model in models:
+        model_data = combined_feature_importance[combined_feature_importance['Model'] == model]
+        data.append(go.Bar(x=model_data['Feature'], y=model_data['Importance'], name=model))
+
+    layout = go.Layout(
+        title='Feature Importance Comparison',
+        xaxis=dict(title='Features'),
+        yaxis=dict(title='Importance'),
+        barmode='group',
+        xaxis_tickangle=-45  # Rotate x-axis labels for better readability
+    )
+
+    fig = go.Figure(data=data, layout=layout)
+    return fig
+
+def plot_model_accuracy(accuracies):
+    models = ['Decision Tree', 'XGBoost']
+    colors = ['blue', 'green']
+    
+    data = [go.Bar(x=models, y=accuracies, marker=dict(color=colors))]
+    
+    layout = go.Layout(
+        title='Model Accuracy Comparison',
+        xaxis=dict(title='Models'),
+        yaxis=dict(title='Accuracy'),
+        yaxis_range=[0, 1]  # Set the y-axis range to match accuracy values (0-1)
+    )
+    
+    fig = go.Figure(data=data, layout=layout)
+    return fig

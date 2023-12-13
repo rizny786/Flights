@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from numerize.numerize import numerize
-import f_visualizations as dv
+import visualizations as dv
 from st_pages import Page, show_pages
 
 
