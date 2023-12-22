@@ -2,9 +2,9 @@ from sklearn.preprocessing import StandardScaler,LabelEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 
-from xgboost import XGBClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
+from xgboost import XGBClassifier,XGBRegressor
+from sklearn.tree import DecisionTreeClassifier,DecisionTreeRegressor
+from sklearn.metrics import accuracy_score, mean_squared_error
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -51,41 +51,95 @@ def process_and_save_data(df, categorical_cols, numerical_cols, filename):
 
     return combined_df
 
-def train_dt(processed_df):
-    # Separate features and target variable
-    X = processed_df.drop(columns=['OnTime'])  # Features
-    y = processed_df['OnTime']  # Target variable
+def process_data(df, categorical_cols, numerical_cols, type):
+    # Handling missing values
+    df = df.dropna().reset_index()  # Dropping rows with missing values or use df.fillna() to impute missing values
+    if type == 'cls':
+        df['OnTime'] = df['ArrDelay'].apply(lambda x: 1 if x <= 0 else 0)
+         # Separate features and the modified target variable
+        X = df.drop(columns=['ArrDelay', 'OnTime'])  # Features
+        y = df['OnTime']  # Target variable
+    elif type == 'reg':
+        X = df.drop(columns=['ArrDelay'])  # Features
+        y = df['ArrDelay']  # Target variable
+   
 
-    # Splitting the data into train and test sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Handle missing values in the numerical columns (if any)
+    imputer = SimpleImputer(strategy='mean')
+    X[numerical_cols] = imputer.fit_transform(X[numerical_cols])
 
-    # Training the Decision Tree Classifier
-    dt_classifier = DecisionTreeClassifier(random_state=42)
-    dt_classifier.fit(X_train, y_train)
+    # Scale numerical columns
+    scaler = StandardScaler()
+    X[numerical_cols] = scaler.fit_transform(X[numerical_cols])
 
-    # Predict on the test set and calculate accuracy
-    y_pred = dt_classifier.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
+    # Apply Label Encoding to categorical columns
+    encoder = LabelEncoder()
+    X_encoded = X[categorical_cols].apply(encoder.fit_transform)
 
-    return dt_classifier, accuracy
+    # Combine encoded and non-categorical columns
+    X_processed = pd.concat([X_encoded.reset_index(drop=True), X[numerical_cols].reset_index(drop=True)], axis=1)
 
-def train_xgb(processed_df):
-    # Separate features and target variable
-    X = processed_df.drop(columns=['OnTime'])  # Features
-    y = processed_df['OnTime']  # Target variable
+    # Combine X_processed and y into a single DataFrame
+    combined_df = pd.concat([X_processed, y], axis=1)
 
-    # Splitting the data into train and test sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    combined_df = combined_df.dropna()
 
-    # Training the XGBoost Classifier model
-    xgb_clf = XGBClassifier(random_state=42)
-    xgb_clf.fit(X_train, y_train)
+    return combined_df
 
-    # Predict on the test set and calculate accuracy
-    y_pred = xgb_clf.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
+def train_dt(processed_df, type):
+    if type == 'cls':
+        X = processed_df.drop(columns=['OnTime'])  # Features
+        y = processed_df['OnTime']  # Target variable
 
-    return xgb_clf, accuracy
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        dt_model = DecisionTreeClassifier(random_state=42)
+        dt_model.fit(X_train, y_train)
+
+        y_pred = dt_model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+
+    elif type == 'reg':
+        X = processed_df.drop(columns=['ArrDelay'])  # Features
+        y = processed_df['ArrDelay']  # Target variable
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        dt_model = DecisionTreeRegressor(random_state=42)
+        dt_model.fit(X_train, y_train)
+
+        y_pred = dt_model.predict(X_test)
+        accuracy = mean_squared_error(y_test, y_pred)
+        
+    return dt_model, accuracy
+
+def train_xgb(processed_df,type):
+    if type == 'cls':
+        X = processed_df.drop(columns=['OnTime'])  # Features
+        y = processed_df['OnTime']  # Target variable
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        xgb = XGBClassifier(random_state=42)
+        xgb.fit(X_train, y_train)
+
+        y_pred = xgb.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+
+    elif type == 'reg':
+        X = processed_df.drop(columns=['ArrDelay'])  # Features
+        y = processed_df['ArrDelay']  # Target variable
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        xgb = XGBRegressor(random_state=42)
+        xgb.fit(X_train, y_train)
+
+        y_pred = xgb.predict(X_test)
+        accuracy = mean_squared_error(y_test, y_pred)
+
+    return xgb, accuracy
+
 
 def analyze_lr_features(trained_model, processed_df):
     # Separate features and target variable
@@ -147,7 +201,7 @@ def plot_model_accuracy(accuracies):
     plt.xlabel('Models')
     plt.ylabel('Accuracy')
     plt.title('Model Accuracy Comparison')
-    plt.ylim(0, 1)  # Set the y-axis limit to match accuracy values (0-1)
+    # plt.ylim(0, 1)  # Set the y-axis limit to match accuracy values (0-1)
     plt.show()
 
 def plot_feature_importance(combined_feature_importance):

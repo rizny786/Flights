@@ -183,7 +183,7 @@ def flight_trend_ontime_arrival(dataframe):
 
     layout = go.Layout(
         title='Flight Trend for On-Time Arrival by Airline',
-        xaxis=dict(title='Month'),
+        xaxis=dict(title='Months'),
         yaxis=dict(title='Number of Flights')
     )
 
@@ -212,8 +212,9 @@ def flight_trend_delayed_arrival(dataframe):
 
     layout = go.Layout(
         title='Flight Trend for Delayed Arrival by Airline',
-        xaxis=dict(title='Month'),
-        yaxis=dict(title='Number of Flights')
+        xaxis=dict(title='Months'),
+        yaxis=dict(title='Number of Flights'),
+        grid=dict()
     )
 
     fig = go.Figure(data=traces, layout=layout)

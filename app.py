@@ -14,18 +14,6 @@ show_pages(
         Page("pages/3_Results.py", "Results", "💡"),
     ]
 )
-@st.cache_data
-def set_bg(file_url):
-    st.markdown(
-        f"""
-        <style>
-        [data-testid="column"] > div:first-child {{
-            border: 1px solid black;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
 
 st.set_page_config(
     page_title="Business Intelligence",
@@ -33,7 +21,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed")
 
-set_bg('Images/bg.png')
+# set_bg()
 
 st.markdown("# Dashboard ✈️")
 
@@ -94,91 +82,94 @@ with st.spinner("Loading"):
     st.divider()
     r_c1, r_m, r_c2 = st.columns([50,5, 50], gap="small")
 
-    with r_c1:
-        st.title("1991")
-        # st.image('Images/91.png',use_column_width=True)
-        r1_c1, r1_c2, r1_c3, r1_c4, r1_c5, r1_c6 = st.columns(
-            [1, 1, 1, 1, 1, 1], gap="small")
-        r2_c1, r2_c2 = st.columns([1, 1], gap="small")
-        r3_c1, r3_c2 = st.columns([1, 1], gap="small")
-        total = float(len(df_q_91['Year']))
-        delayed = float(len(df_q_91[df_q_91['ArrDelay'] > 0]))
-        non_delayed = float(len(df_q_91[df_q_91['ArrDelay'] <= 0]))
 
-        with r1_c1:
-            st.image('Images/airline.png')
-            st.metric(label="Airlines", value=df_q_91['UniqueCarrier'].nunique())
-        with r1_c2:
-            st.image('Images/origin.png', width=100)
-            st.metric(label="Origins", value=df_q_91['Origin'].nunique())
-        with r1_c3:
-            st.image('Images/dest.png', width=100)
-            st.metric(label="Destination", value=df_q_91['Dest'].nunique())
+    with st.container(border=True):
+        with r_c1:
+            st.title("1991")
+            # st.image('Images/91.png',use_column_width=True)
+            r1_c1, r1_c2, r1_c3, r1_c4, r1_c5, r1_c6 = st.columns(
+                [1, 1, 1, 1, 1, 1], gap="small")
+            r2_c1, r2_c2 = st.columns([1, 1], gap="small")
+            r3_c1, r3_c2 = st.columns([1, 1], gap="small")
+            total = float(len(df_q_91['Year']))
+            delayed = float(len(df_q_91[df_q_91['ArrDelay'] > 0]))
+            non_delayed = float(len(df_q_91[df_q_91['ArrDelay'] <= 0]))
 
-        with r1_c4:
-            st.image('Images/total.png')
-            st.metric(label="Total", value=numerize(total))
+            with r1_c1:
+                st.image('Images/airline.png')
+                st.metric(label="Airlines", value=df_q_91['UniqueCarrier'].nunique())
+            with r1_c2:
+                st.image('Images/origin.png', width=100)
+                st.metric(label="Origins", value=df_q_91['Origin'].nunique())
+            with r1_c3:
+                st.image('Images/dest.png', width=100)
+                st.metric(label="Destination", value=df_q_91['Dest'].nunique())
 
-        with r1_c5:
-            st.image('Images/delayed.png', width=100)
-            st.metric(label="Origins", value=numerize(delayed))
-        with r1_c6:
-            st.image('Images/status.png')
-            st.metric(label="Non Delayed", value=numerize(non_delayed))
+            with r1_c4:
+                st.image('Images/total.png')
+                st.metric(label="Total", value=numerize(total))
 
-        with r2_c1:
-            st.plotly_chart(dv.pie_chart_delayed_vs_non_delayed(
-                df_q_91), use_container_width=True)
-        with r2_c2:
-            st.plotly_chart(dv.by_airline(
-                df_q_91), use_container_width=True)
+            with r1_c5:
+                st.image('Images/delayed.png', width=100)
+                st.metric(label="Origins", value=numerize(delayed))
+            with r1_c6:
+                st.image('Images/status.png')
+                st.metric(label="Non Delayed", value=numerize(non_delayed))
 
-        with r3_c1:
-            st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_91), use_container_width=True)
-        with r3_c2:
-            st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_91), use_container_width=True)
-       
-    with r_c2:
-        st.title("2001")    
-        # st.image('Images/01.png',use_column_width=True)
-        r1_c1, r1_c2, r1_c3, r1_c4, r1_c5, r1_c6 = st.columns(
-            [1, 1, 1, 1, 1, 1], gap="small")
-        r2_c1, r2_c2 = st.columns([1, 1], gap="small")
-        r3_c1, r3_c2 = st.columns([1, 1], gap="small")
-        total = float(len(df_q_01['Year']))
-        delayed = float(len(df_q_01[df_q_01['ArrDelay'] > 0]))
-        non_delayed = float(len(df_q_01[df_q_01['ArrDelay'] <= 0]))
+            with r2_c1:
+                st.plotly_chart(dv.pie_chart_delayed_vs_non_delayed(
+                    df_q_91), use_container_width=True)
+            with r2_c2:
+                st.plotly_chart(dv.by_airline(
+                    df_q_91), use_container_width=True)
 
-        with r1_c1:
-            st.image('Images/airline.png')
-            st.metric(label="Airlines", value=df_q_01['UniqueCarrier'].nunique(),)
-        with r1_c2:
-            st.image('Images/origin.png', width=100)
-            st.metric(label="Origins", value=df_q_01['Origin'].nunique())
-        with r1_c3:
-            st.image('Images/dest.png', width=100)
-            st.metric(label="Destination", value=df_q_01['Dest'].nunique())
+            with r3_c1:
+                st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_91), use_container_width=True)
+            with r3_c2:
+                st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_91), use_container_width=True)
 
-        with r1_c4:
-            st.image('Images/total.png')
-            st.metric(label="Total", value=numerize(total))
+    with st.container(border=True):
+        with r_c2:
+            st.title("2001")    
+            # st.image('Images/01.png',use_column_width=True)
+            r1_c1, r1_c2, r1_c3, r1_c4, r1_c5, r1_c6 = st.columns(
+                [1, 1, 1, 1, 1, 1], gap="small")
+            r2_c1, r2_c2 = st.columns([1, 1], gap="small")
+            r3_c1, r3_c2 = st.columns([1, 1], gap="small")
+            total = float(len(df_q_01['Year']))
+            delayed = float(len(df_q_01[df_q_01['ArrDelay'] > 0]))
+            non_delayed = float(len(df_q_01[df_q_01['ArrDelay'] <= 0]))
 
-        with r1_c5:
-            st.image('Images/delayed.png', width=100)
-            st.metric(label="Delayed", value=numerize(delayed))
+            with r1_c1:
+                st.image('Images/airline.png')
+                st.metric(label="Airlines", value=df_q_01['UniqueCarrier'].nunique(),)
+            with r1_c2:
+                st.image('Images/origin.png', width=100)
+                st.metric(label="Origins", value=df_q_01['Origin'].nunique())
+            with r1_c3:
+                st.image('Images/dest.png', width=100)
+                st.metric(label="Destination", value=df_q_01['Dest'].nunique())
 
-        with r1_c6:
-            st.image('Images/status.png')
-            st.metric(label="Non Delayed", value=numerize(non_delayed))
+            with r1_c4:
+                st.image('Images/total.png')
+                st.metric(label="Total", value=numerize(total))
 
-        with r2_c1:
-            st.plotly_chart(dv.pie_chart_delayed_vs_non_delayed(
-                df_q_01), use_container_width=True)
-        with r2_c2:
-            st.plotly_chart(dv.by_airline(
-                df_q_01), use_container_width=True)
-        with r3_c1:
-            st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_01), use_container_width=True)
-        with r3_c2:
-            st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_01), use_container_width=True)
+            with r1_c5:
+                st.image('Images/delayed.png', width=100)
+                st.metric(label="Delayed", value=numerize(delayed))
+
+            with r1_c6:
+                st.image('Images/status.png')
+                st.metric(label="Non Delayed", value=numerize(non_delayed))
+
+            with r2_c1:
+                st.plotly_chart(dv.pie_chart_delayed_vs_non_delayed(
+                    df_q_01), use_container_width=True)
+            with r2_c2:
+                st.plotly_chart(dv.by_airline(
+                    df_q_01), use_container_width=True)
+            with r3_c1:
+                st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_01), use_container_width=True,)
+            with r3_c2:
+                st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_01), use_container_width=True)
             
