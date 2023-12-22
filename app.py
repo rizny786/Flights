@@ -4,7 +4,7 @@ import numpy as np
 from numerize.numerize import numerize
 import visualizations as dv
 from st_pages import Page, show_pages
-
+import base64
 
 show_pages(
     [
@@ -14,12 +14,26 @@ show_pages(
         Page("pages/3_Results.py", "Results", "💡"),
     ]
 )
+@st.cache_data
+def set_bg(file_url):
+    st.markdown(
+        f"""
+        <style>
+        [data-testid="column"] > div:first-child {{
+            border: 1px solid black;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 st.set_page_config(
     page_title="Business Intelligence",
     page_icon="✈️",
     layout="wide",
     initial_sidebar_state="collapsed")
+
+set_bg('Images/bg.png')
 
 st.markdown("# Dashboard ✈️")
 
@@ -33,7 +47,7 @@ with st.spinner("Loading"):
     df_91, df_01 = load_data()
 
     col_af, col_of, col_df, col_mf, col_dmf = st.columns(
-        [1, 1, 1, 1, 1], gap="medium")
+        [1, 1, 1, 1, 1], gap="medium",)
 
     with col_af:
         airline_filter = st.multiselect(
@@ -124,18 +138,8 @@ with st.spinner("Loading"):
         with r3_c2:
             st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_91), use_container_width=True)
        
-    with r_m:
-        st.markdown(f'''
-                    <html>
-                    <body style="background-image: url('images/bg.jpg'); background-repeat: repeat;">
-                    <!-- You can add content here if needed -->
-                    </body>
-                    </html>
-                    ''', unsafe_allow_html= True)
-
-
     with r_c2:
-        st.title("2001")
+        st.title("2001")    
         # st.image('Images/01.png',use_column_width=True)
         r1_c1, r1_c2, r1_c3, r1_c4, r1_c5, r1_c6 = st.columns(
             [1, 1, 1, 1, 1, 1], gap="small")
