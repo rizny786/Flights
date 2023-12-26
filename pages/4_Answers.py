@@ -4,18 +4,41 @@ import pandas as pd
 
 st.set_page_config(page_title="Compare & Contrast", page_icon="💡", layout="wide", initial_sidebar_state="auto", menu_items=None)
 
+@st.cache_data
+def load_data():
+   cols_91 = ['Year','Month','DayofMonth','DayOfWeek','DepTime','CRSDepTime','ArrTime','CRSArrTime','UniqueCarrier','FlightNum','ActualElapsedTime','CRSElapsedTime','ArrDelay','DepDelay','Origin','Dest','Distance','Cancelled','Diverted']
+   cols_01 = ['Year','Month','DayofMonth','DayOfWeek','DepTime','CRSDepTime','ArrTime','CRSArrTime','UniqueCarrier','FlightNum','TailNum','ActualElapsedTime','CRSElapsedTime','ArrDelay','DepDelay','Origin','Dest','Distance','TaxiIn','TaxiOut','Cancelled','Diverted']
+   return  pd.read_csv("Data/1991.csv.gz", encoding='cp1252', compression="gzip", usecols=cols_91), pd.read_csv("Data/2001.csv.gz", encoding='cp1252', compression="gzip", usecols=cols_01)
+   
+
+df91, df01 = load_data()
 
 diff = pd.read_csv('Data/diff.csv', index_col=None, delimiter='|')
 simi = pd.read_csv('Data/simi.csv', index_col=None, delimiter='|')
+avg_delay_by_airline_91 = df91.groupby('Airline')['ArrDelay'].mean().reset_index()
+top_10_airline_delays_91 = avg_delay_by_airline_91.nlargest(12, 'ArrDelay')
+
+avg_delay_by_airline_01 = df01.groupby('Airline')['ArrDelay'].mean().reset_index()
+top_10_airline_delays_01 = avg_delay_by_airline_01.nlargest(12, 'ArrDelay')
+
+
+
 
 col_l, col_r = st.columns([1,1], gap="small")
 with col_l:
     st.header("Similarities 1991 vs 2001")
     st.table(simi)
+    col_c1, col_c2, col_c3 = st.columns([1,1,1], gap="small")
+    with col_c1:
+        top_10_airline_delays_91.show()
 
 with col_r:
     st.header("Differences 1991 vs 2001")
     st.table(diff)
+    col_c1, col_c2, col_c3 = st.columns([1,1,1], gap="small")
+    with col_c1:
+      top_10_airline_delays_91.show()
+
 
 st.header("What predictive methodologies can be employed to anticipate flight delays based on input parameters?", divider="grey")
 st.markdown('''
@@ -64,7 +87,7 @@ st.markdown('''
 
 st.header("Ethical Analysis of Airport Data Collection and Utilization through Solove's Taxonomy of Privacy (2006)", divider="grey")
 st.markdown('''
-### Information Collection: Extensive Data Gathering
+##### Information Collection: Extensive Data Gathering
 
 The airport's intent to collect a vast array of data from travelers' smartphones, flight plans, passport control, security checkpoints, and commercial interactions raises concerns aligned with Solove's "Information Collection." This comprehensive data acquisition potentially infringes upon individuals' privacy rights by amassing extensive personal information without explicit consent or justification for the breadth of surveillance.
 
@@ -76,7 +99,7 @@ The airport's plan to categorize travelers based on their potential to cause fli
 
 Utilizing travelers' categorized data to send targeted text message reminders and providing airport staff with a dashboard indicating travelers' locations raises concerns of "Information Dissemination" and "Invasion" as per Solove's framework. Disseminating personalized information and monitoring individuals' movements without transparent consent may infringe upon privacy rights, potentially leading to invasive surveillance practices.
 
-### Decisional Interference: Facial Recognition Systems in Commercial Spaces
+##### Decisional Interference: Facial Recognition Systems in Commercial Spaces
 
 The proposed installation of facial recognition systems in commercial establishments aligns with Solove's concept of "Decisional Interference." Implementing such systems without clear consent mechanisms or oversight may impede individuals' autonomy and choices within these spaces, raising ethical concerns regarding privacy and potential limitations on individuals' freedom.
 

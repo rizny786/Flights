@@ -267,13 +267,9 @@ def plot_model_accuracy(accuracies):
     fig = go.Figure(data=data, layout=layout)
     return fig
 
-def correlation_heatmap_plot(df):
-    # Select only numeric columns from the DataFrame
-    numeric_df = df.select_dtypes(include=['float64', 'int64'])
+def correlation_heatmap_plot(corr_matrix):
 
-    # Calculate correlation matrix
-    corr_matrix = numeric_df.corr().abs()
-
+    corr_matrix.set_index(corr_matrix.columns[0], inplace=True)
     # Create a custom colorscale for the heatmap
     colorscale = [
         [0, 'white'],

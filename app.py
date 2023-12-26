@@ -4,7 +4,6 @@ import numpy as np
 from numerize.numerize import numerize
 import visualizations as dv
 from st_pages import Page, show_pages
-import base64
 
 show_pages(
     [
@@ -36,9 +35,6 @@ def load_data():
 
 with st.spinner("Loading"):
     df_91, df_01 = load_data()
-
-    df_91.sample(20).to_csv('Data/sdf91.csv', index=False)
-    df_01.sample(20).to_csv('Data/sdf01.csv', index=False)
 
     col_af, col_of, col_df, col_mf, col_dmf = st.columns(
         [1, 1, 1, 1, 1], gap="medium",)

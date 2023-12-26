@@ -10,17 +10,15 @@ st.title("Data Engineering ⚙️")
 
 
 @st.cache_data
-def load_data():
-    cols_91 = ['Year','Month','DayofMonth','DayOfWeek','DepTime','CRSDepTime','ArrTime','CRSArrTime','UniqueCarrier','FlightNum','ActualElapsedTime','CRSElapsedTime','ArrDelay','DepDelay','Origin','Dest','Distance','Cancelled','Diverted']
-    cols_01 = ['Year','Month','DayofMonth','DayOfWeek','DepTime','CRSDepTime','ArrTime','CRSArrTime','UniqueCarrier','FlightNum','TailNum','ActualElapsedTime','CRSElapsedTime','ArrDelay','DepDelay','Origin','Dest','Distance','TaxiIn','TaxiOut','Cancelled','Diverted']
-    return pd.read_csv("Data/1991.csv.gz", encoding='cp1252', compression="gzip", usecols=cols_91), pd.read_csv("Data/2001.csv.gz", encoding='cp1252', compression="gzip", usecols=cols_01)
+def load_data_c():
+   return pd.read_csv("Data/corr_91.csv"), pd.read_csv("Data/corr_01.csv")
 
 
 @st.cache_data
 def load_data_t():
     return pd.read_csv('Data/sdf91.csv'),  pd.read_csv('Data/sdf01.csv'), pd.read_csv('Data/pdf91.csv'),  pd.read_csv('Data/pdf01.csv')
 
-df91, df01 = load_data()
+corr_91, corr_01 = load_data_c()
 
 sdf91, sdf01, pdf91, pdf01 = load_data_t()
 col_l, col_r = st.columns([1, 1], gap="medium")
@@ -41,7 +39,7 @@ with col_1r:
 
 st.markdown('''
             ### Data Preprocessing Steps:
-                1. Removing repetative information
+                1. Eliminate highly correlated features
                 2. Remove null values
                 3. Label encoding for Categorical columns
                 4. Normalizing numerical columns
@@ -51,10 +49,10 @@ st.markdown('''
 st.header("Correlation Analysis")
 col_1l, col_1r = st.columns([1, 1], gap="medium")
 with col_1l:
-    st.plotly_chart(dv.correlation_heatmap_plot(df91))
+    st.plotly_chart(dv.correlation_heatmap_plot(corr_91))
 
 with col_1r:
-    st.plotly_chart(dv.correlation_heatmap_plot(df01))
+    st.plotly_chart(dv.correlation_heatmap_plot(corr_01))
 
 
 st.header("Processed Data")

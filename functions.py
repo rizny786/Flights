@@ -1,4 +1,4 @@
-from sklearn.preprocessing import StandardScaler,LabelEncoder
+from sklearn.preprocessing import MinMaxScaler,LabelEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 
@@ -31,7 +31,7 @@ def process_and_save_data(df, categorical_cols, numerical_cols, filename):
     X[numerical_cols] = imputer.fit_transform(X[numerical_cols])
 
     # Scale numerical columns
-    scaler = StandardScaler()
+    scaler = MinMaxScaler()
     X[numerical_cols] = scaler.fit_transform(X[numerical_cols])
 
     # Apply Label Encoding to categorical columns
@@ -62,7 +62,9 @@ def process_data(df, categorical_cols, numerical_cols, type):
     elif type == 'reg':
         X = df.drop(columns=['ArrDelay'])  # Features
         y = df['ArrDelay']  # Target variable
-   
+        scaler = MinMaxScaler()
+        y = scaler.fit_transform(y.values.reshape(-1, 1))
+        y = pd.DataFrame(y, columns=['ArrDelay'])
 
     # Handle missing values in the numerical columns (if any)
     imputer = SimpleImputer(strategy='mean')
@@ -76,7 +78,7 @@ def process_data(df, categorical_cols, numerical_cols, type):
     X_processed = pd.concat([X_encoded.reset_index(drop=True), X[numerical_cols].reset_index(drop=True)], axis=1)
 
      # Scale all columns (both numerical and encoded categorical)
-    scaler = StandardScaler()
+    scaler = MinMaxScaler()
     X_processed[X_processed.columns] = scaler.fit_transform(X_processed[X_processed.columns])
 
     # Combine X_processed and y into a single DataFrame
