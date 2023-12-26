@@ -1,0 +1,5 @@
+Feature|1991|2001|Explanation
+DepDelay|High|High|Consistently high importance, indicating its crucial role in predicting delays.
+Distance|Medium|Medium|Moderately influential in both years, affecting delays to a similar degree.
+ActualElapsedTime|Medium|Low|Seen as moderately important in 1991, but less significant in 2001.
+Origin|Medium|Low|Shows moderate importance in 1991, but reduced importance in 2001.

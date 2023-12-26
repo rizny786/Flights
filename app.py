@@ -9,9 +9,12 @@ import base64
 show_pages(
     [
         Page("app.py", "Exploration", "🔍"),
+        Page("pages/0_Home.py", "Introduction", "💁🏽"),
         Page("pages/1_Engineering.py", "Engineering", "⚙️"),
         Page("pages/2_Modeling.py", "Modeling", "🤖 "),
-        Page("pages/3_Results.py", "Results", "💡"),
+        Page("pages/3_Results.py", "Results", "✨"),
+        Page("pages/4_Answers.py", "Compare & Contrast", "💡"),
+
     ]
 )
 
@@ -33,6 +36,9 @@ def load_data():
 
 with st.spinner("Loading"):
     df_91, df_01 = load_data()
+
+    df_91.sample(20).to_csv('Data/sdf91.csv', index=False)
+    df_01.sample(20).to_csv('Data/sdf01.csv', index=False)
 
     col_af, col_of, col_df, col_mf, col_dmf = st.columns(
         [1, 1, 1, 1, 1], gap="medium",)
@@ -127,7 +133,6 @@ with st.spinner("Loading"):
         with r3_c2:
             st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_91), use_container_width=True)
 
-
     with r_c2:
         st.title("2001")    
         # st.image('Images/01.png',use_column_width=True)
@@ -171,4 +176,3 @@ with st.spinner("Loading"):
             st.plotly_chart(dv.flight_trend_ontime_arrival(df_q_01), use_container_width=True,)
         with r3_c2:
             st.plotly_chart(dv.flight_trend_delayed_arrival(df_q_01), use_container_width=True)
-            

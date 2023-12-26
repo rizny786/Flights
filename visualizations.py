@@ -259,11 +259,49 @@ def plot_model_accuracy(accuracies):
     data = [go.Bar(x=models, y=accuracies, marker=dict(color=colors))]
     
     layout = go.Layout(
-        title='Model Accuracy Comparison',
+        title='Model Performance Comparison',
         xaxis=dict(title='Models'),
         yaxis=dict(title='Accuracy'),
-        yaxis_range=[0, 1]  # Set the y-axis range to match accuracy values (0-1)
     )
     
     fig = go.Figure(data=data, layout=layout)
+    return fig
+
+def correlation_heatmap_plot(df):
+    # Select only numeric columns from the DataFrame
+    numeric_df = df.select_dtypes(include=['float64', 'int64'])
+
+    # Calculate correlation matrix
+    corr_matrix = numeric_df.corr().abs()
+
+    # Create a custom colorscale for the heatmap
+    colorscale = [
+        [0, 'white'],
+        [0.75, 'yellow'],
+        [0.9, 'orange'],
+        [0.9999, 'red'],
+        [1.0, 'white']
+    ]
+
+    hover_text = [[f'{y} vs {x}<br>Correlation: {corr_matrix.loc[y, x]:.2f}' for x in corr_matrix.columns] for y in corr_matrix.index]
+
+    # Create a heatmap plot for correlation matrix using Plotly graph objects
+    data = go.Heatmap(z=corr_matrix.values,
+                      x=corr_matrix.columns,
+                      y=corr_matrix.index,
+                      text=hover_text,
+                      colorscale=colorscale,
+                      colorbar=dict(title='Correlation'),
+                      zmin=0, zmax=1,
+                      hoverongaps=False,
+                      hoverinfo='text')  # Set hoverinfo to display text
+
+    layout = go.Layout(title='Correlation Plot',
+                       xaxis=dict(title='Features', showgrid=True, gridcolor='lightgrey'),
+                       yaxis=dict(title='Features', showgrid=True, gridcolor='lightgrey'),
+                       width=600,  # Adjust width as needed
+                       height=600)  # Set height equal to width for a square shape
+
+    fig = go.Figure(data=data, layout=layout)
+
     return fig

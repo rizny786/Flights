@@ -1,0 +1,5 @@
+Feature|1991|2001|Explanation
+DepTime|Low|Medium|Shifted from low to medium importance, indicating changing trends.
+TaxiOut|-|High|Emerged as highly influential in 2001, indicating operational changes.
+TaxiIn|-|Medium|Gained importance in 2001, affecting delays during post-landing phases.
+FlightNum|Medium|Low|Decreased importance in 2001, implying changes in flight numbering impact.
