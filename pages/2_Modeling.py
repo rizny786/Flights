@@ -21,21 +21,21 @@ with c1:
                 from how frequently or deeply a feature is used to make decisions across various branches. Analyzing feature importance helps identify the most influential features 
                 in predicting the target class, providing insights into the underlying relationships within the dataset.
                 ''')
-    with c2: 
-        st.subheader("Regressor")    
-        st.markdown('''
-                A Decision Tree Regressor is used for regression tasks. Instead of predicting classes, it predicts continuous values. It works by partitioning the dataset into subsets
-                     and fitting a simple model (like a constant value) for each subset. Decision tree regressors are also interpretable and easy to visualize. Feature importance in 
-                    regression trees is calculated by assessing how much each feature contributes to reducing the variance within the data. It helps in understanding which features have the most impact on predicting the target variable..
-                ''')
-
-
-c1, c2 = st.columns([1,1], gap="small")
-with c1:
+with c2: 
     st.subheader("Classifier") 
     st.markdown('''An advanced and popular implementation of gradient boosting algorithms. It excels in performance due to its efficient computation, regularization techniques, and 
                 handling missing values. XGBoost builds multiple weak learners (decision trees) sequentially, where each subsequent tree corrects the errors made by the previous one. 
                 It automatically determines feature importance by evaluating the gain of each feature across all splits in all trees. The higher the gain, the more important the feature is in predicting the target class.
+                ''')    
+
+
+c1, c2 = st.columns([1,1], gap="small")
+with c1:
+    st.subheader("Regressor")    
+    st.markdown('''
+                A Decision Tree Regressor is used for regression tasks. Instead of predicting classes, it predicts continuous values. It works by partitioning the dataset into subsets
+                     and fitting a simple model (like a constant value) for each subset. Decision tree regressors are also interpretable and easy to visualize. Feature importance in 
+                    regression trees is calculated by assessing how much each feature contributes to reducing the variance within the data. It helps in understanding which features have the most impact on predicting the target variable..
                 ''')
 with c2: 
     st.subheader("Regressor") 

@@ -15,10 +15,10 @@ df91, df01 = load_data()
 
 diff = pd.read_csv('Data/diff.csv', index_col=None, delimiter='|')
 simi = pd.read_csv('Data/simi.csv', index_col=None, delimiter='|')
-avg_delay_by_airline_91 = df91.groupby('Airline')['ArrDelay'].mean().reset_index()
+avg_delay_by_airline_91 = df91.groupby('UniqueCarrier')['ArrDelay'].mean().reset_index()
 top_10_airline_delays_91 = avg_delay_by_airline_91.nlargest(12, 'ArrDelay')
 
-avg_delay_by_airline_01 = df01.groupby('Airline')['ArrDelay'].mean().reset_index()
+avg_delay_by_airline_01 = df01.groupby('UniqueCarrier')['ArrDelay'].mean().reset_index()
 top_10_airline_delays_01 = avg_delay_by_airline_01.nlargest(12, 'ArrDelay')
 
 
