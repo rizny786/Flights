@@ -27,7 +27,7 @@ with col_l:
 
     with col_r1:
         st.subheader("Regressor")
-        st.dataframe(accuracies_reg[['Model','Year 91']],use_container_width=True)
+        st.dataframe(accuracies_reg[['Model','Year 91']],use_container_width=True,column_config = {'Year 91': st.column_config.NumberColumn(format="%.10f")})
         st.subheader("Mean Squared Error")
         fig = v.plot_model_accuracy(accuracies_reg['Year 91'].to_list())
         st.plotly_chart(fig, use_container_width= True)
@@ -50,7 +50,7 @@ with col_r:
 
     with col_r1:
         st.subheader("Regressor")
-        st.dataframe(accuracies_reg[['Model','Year 01']],use_container_width=True)
+        st.dataframe(accuracies_reg[['Model','Year 01']],use_container_width=True,column_config = {'Year 01': st.column_config.NumberColumn(format="%.10f")})
         st.subheader("Mean Squared Error")
         fig = v.plot_model_accuracy(accuracies_reg['Year 01'].to_list())
         st.plotly_chart(fig, use_container_width= True)

@@ -4,40 +4,43 @@ import pandas as pd
 
 st.set_page_config(page_title="Compare & Contrast", page_icon="💡", layout="wide", initial_sidebar_state="auto", menu_items=None)
 
-@st.cache_data
-def load_data():
-   cols_91 = ['Year','Month','DayofMonth','DayOfWeek','DepTime','CRSDepTime','ArrTime','CRSArrTime','UniqueCarrier','FlightNum','ActualElapsedTime','CRSElapsedTime','ArrDelay','DepDelay','Origin','Dest','Distance','Cancelled','Diverted']
-   cols_01 = ['Year','Month','DayofMonth','DayOfWeek','DepTime','CRSDepTime','ArrTime','CRSArrTime','UniqueCarrier','FlightNum','TailNum','ActualElapsedTime','CRSElapsedTime','ArrDelay','DepDelay','Origin','Dest','Distance','TaxiIn','TaxiOut','Cancelled','Diverted']
-   return  pd.read_csv("Data/1991.csv.gz", encoding='cp1252', compression="gzip", usecols=cols_91), pd.read_csv("Data/2001.csv.gz", encoding='cp1252', compression="gzip", usecols=cols_01)
-   
 
-df91, df01 = load_data()
 
 diff = pd.read_csv('Data/diff.csv', index_col=None, delimiter='|')
 simi = pd.read_csv('Data/simi.csv', index_col=None, delimiter='|')
-avg_delay_by_airline_91 = df91.groupby('UniqueCarrier')['ArrDelay'].mean().reset_index()
-top_10_airline_delays_91 = avg_delay_by_airline_91.nlargest(12, 'ArrDelay')
 
-avg_delay_by_airline_01 = df01.groupby('UniqueCarrier')['ArrDelay'].mean().reset_index()
-top_10_airline_delays_01 = avg_delay_by_airline_01.nlargest(12, 'ArrDelay')
+top_10_airline_delays_91 = pd.read_csv('Data/top_carrier_91.csv')
+top_10_airline_delays_01 = pd.read_csv('Data/top_carrier_01.csv')
 
+top_10_origin_delays_91 = pd.read_csv('Data/top_origin_91.csv')
+top_10_origin_delays_01 = pd.read_csv('Data/top_origin_01.csv')
 
+top_10_dest_delays_91 = pd.read_csv('Data/top_dest_91.csv')
+top_10_dest_delays_01 = pd.read_csv('Data/top_dest_01.csv')
 
 
 col_l, col_r = st.columns([1,1], gap="small")
 with col_l:
-    st.header("Similarities 1991 vs 2001")
-    st.table(simi)
-    col_c1, col_c2, col_c3 = st.columns([1,1,1], gap="small")
-    with col_c1:
-        top_10_airline_delays_91.show()
+   st.header("Similarities 1991 vs 2001")
+   st.table(simi)
+   col_c1, col_c2, col_c3 = st.columns([1,1,1], gap="small")
+   with col_c1:
+      st.dataframe(top_10_airline_delays_91, use_container_width=True)
+   with col_c2:
+      st.dataframe(top_10_origin_delays_91, use_container_width=True)
+   with col_c3:
+      st.dataframe(top_10_dest_delays_91, use_container_width=True)
 
 with col_r:
-    st.header("Differences 1991 vs 2001")
-    st.table(diff)
-    col_c1, col_c2, col_c3 = st.columns([1,1,1], gap="small")
-    with col_c1:
-      top_10_airline_delays_91.show()
+   st.header("Differences 1991 vs 2001")
+   st.table(diff)
+   col_c1, col_c2, col_c3 = st.columns([1,1,1], gap="small")
+   with col_c1:
+     st.dataframe(top_10_airline_delays_01, use_container_width=True)
+   with col_c2:
+      st.dataframe(top_10_origin_delays_01, use_container_width=True)
+   with col_c3:
+      st.dataframe(top_10_dest_delays_01, use_container_width=True)
 
 
 st.header("What predictive methodologies can be employed to anticipate flight delays based on input parameters?", divider="grey")
